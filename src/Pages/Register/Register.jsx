@@ -1,11 +1,11 @@
-import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import storyImg from "../../../public/images/task.png";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useState } from "react";
+import storyImg from "../../../public/images/task.png";
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const Register = () => {
+    const [showPassword, setShowPassword] = useState(false);
 
   const style = {
     backgroundImage:
@@ -14,14 +14,14 @@ const Login = () => {
     backgroundSize: "cover",
   };
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => console.log(data);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+      } = useForm();
+    
+      const onSubmit = (data) => console.log(data);
 
   return (
     <div
@@ -33,12 +33,16 @@ const Login = () => {
       </div>
       <div className="flex flex-col w-full md:w-2/5 border p-5 rounded-lg mx-3">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-green-600 mb-4">
-          Login Here
+          Register Here
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
-            type="email"
-            className="input input-bordered border-white bg-transparent w-full mb-3 text-white"
+            className="input input-bordered border-white bg-transparent w-full mb-3"
+            placeholder="Enter your name"
+            {...register("name", { required: true })}
+          />
+          <input
+            className="input input-bordered border-white bg-transparent w-full mb-3"
             placeholder="Enter your email"
             {...register("email", { required: true })}
           />
@@ -52,21 +56,23 @@ const Login = () => {
             <span onClick={() => setShowPassword(!showPassword)} className="text-white absolute top-4 right-4">{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
           </div>
           <input
+            className="input input-bordered border-white bg-transparent w-full mb-3"
+            placeholder="Enter your photo"
+            {...register("photo", { required: true })}
+          />
+          <input
             type="submit"
-            value="Login"
+            value="Register"
             className="btn btn-info btn-block"
           />
         </form>
         <p className="text-center text-white">
-          New here? Please{" "}
-          <Link to="/register" className="text-purple-600 font-bold">
-            Register
-          </Link>{" "}
-          here.
+          Already have an account? Please{" "}
+          <Link to="/login" className="text-purple-600 font-bold">Login</Link> here.
         </p>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

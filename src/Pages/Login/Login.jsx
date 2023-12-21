@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import storyImg from "../../../public/images/task.png";
+import { Link, useNavigate } from "react-router-dom";
+import storyImg from "/images/task.png";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Helmet } from "react-helmet-async";
+import useAuth from "../../hooks/useAuth"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { signInUser } = useAuth();
+  const navigate = useNavigate();
 
   const style = {
     backgroundImage:
@@ -21,13 +25,27 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    // console.log(data);
+    signInUser(data.email, data.password)
+    .then(res => {
+        console.log(res);
+        // navigate(from, { replace: true });
+        navigate("/");
+    })
+    .catch(err => {
+        console.log(err);
+    })
+  };
 
   return (
     <div
       style={style}
       className="h-screen flex md:flex-row justify-center items-center"
     >
+      <Helmet>
+        <title>login</title>
+      </Helmet>
       <div className="w-full hidden md:block md:w-2/5">
         <img className="p-5 storyImage" src={storyImg} alt="" />
       </div>

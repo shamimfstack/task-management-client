@@ -4,7 +4,8 @@ import storyImg from "/images/task.png";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
-import useAuth from "../../hooks/useAuth"
+import useAuth from "../../hooks/useAuth";
+import SocialLogin from "../../components/SocialLogin";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,14 +29,14 @@ const Login = () => {
   const onSubmit = (data) => {
     // console.log(data);
     signInUser(data.email, data.password)
-    .then(res => {
+      .then((res) => {
         console.log(res);
         // navigate(from, { replace: true });
-        navigate("/");
-    })
-    .catch(err => {
+        navigate("/dashboard");
+      })
+      .catch((err) => {
         console.log(err);
-    })
+      });
   };
 
   return (
@@ -67,7 +68,12 @@ const Login = () => {
               placeholder="Enter your password"
               {...register("password", { required: true })}
             />
-            <span onClick={() => setShowPassword(!showPassword)} className="text-white absolute top-4 right-4">{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="text-white absolute top-4 right-4"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
           <input
             type="submit"
@@ -75,6 +81,10 @@ const Login = () => {
             className="btn btn-info btn-block"
           />
         </form>
+        <div className=" mt-1 bg-info p-3 rounded-lg">
+          <SocialLogin></SocialLogin>
+        </div>
+
         <p className="text-center text-white">
           New here? Please{" "}
           <Link to="/register" className="text-purple-600 font-bold">

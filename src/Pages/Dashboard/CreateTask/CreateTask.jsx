@@ -1,23 +1,26 @@
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../../hooks/useAxiosPublic"
 import Swal from "sweetalert2";
+import useAuth from "../../../hooks/useAuth";
 
 const CreateTask = () => {
 const axiosPublic = useAxiosPublic()
+const { user } = useAuth();
     const {
         register,
         reset,
         handleSubmit,
-        watch,
-        formState: { errors },
       } = useForm();
 
       const onSubmit = (data) => {
         console.log(data);
         const tasks = {
+          
             title: data.title,
+            email: user?.email,
             description: data.description,
-            dueDate: data.dueDate
+            dueDate: data.dueDate,
+            
         }
         axiosPublic.post("/tasks", tasks)
         .then(res => {

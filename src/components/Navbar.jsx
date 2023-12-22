@@ -39,7 +39,19 @@ const Navbar = () => {
       </li>
       {
         user ?
+        <>
+        <li>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "active" : ""
+          }
+        >
+          Dashboard
+        </NavLink>
+      </li>
         <button className="btn btn-primary btn-sm" onClick={handleLogout}>Logout</button>
+        </>
         :
         <li>
                 <NavLink

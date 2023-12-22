@@ -6,7 +6,7 @@ import UserProfile from "../components/UserProfile";
 const Dashboard = () => {
     // const { user } = useAuth();
   return (
-    <div className="flex h-screen">
+    <div className="flex flex-col md:flex-row h-screen">
       <div className="w-full md:w-2/12 bg-[#158d9c] p-5">
         <UserProfile></UserProfile>
         <div className="divider"></div>

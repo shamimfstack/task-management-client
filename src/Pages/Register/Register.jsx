@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet-async";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import SocialLogin from "../../components/SocialLogin";
 
 // const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 // const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
@@ -28,8 +29,6 @@ const Register = () => {
     register,
     handleSubmit,
     reset,
-    watch,
-    formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
@@ -119,20 +118,15 @@ const Register = () => {
             placeholder="Enter your photo url"
             {...register("photo", { required: true })}
           />
-          {/* <div>
-            <label className="text-white mr-3" htmlFor="photo">Photo:</label>
-            <input
-            className="text-white mb-3"
-            type="file"
-            {...register("photo", { required: true })}
-          />
-          </div> */}
           <input
             type="submit"
             value="Register"
             className="btn btn-info btn-block"
           />
         </form>
+        <div className=" mt-1 bg-info p-3 rounded-lg">
+          <SocialLogin></SocialLogin>
+        </div>
         <p className="text-center text-white">
           Already have an account? Please{" "}
           <Link to="/login" className="text-purple-600 font-bold">

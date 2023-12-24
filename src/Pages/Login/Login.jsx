@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import storyImg from "/images/task.png";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -10,7 +10,10 @@ import SocialLogin from "../../components/SocialLogin";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signInUser } = useAuth();
-  const navigate = useNavigate();
+  const location = useLocation();
+    const navigate = useNavigate();
+
+    let from = location?.state?.from?.pathname || "/";
 
   const style = {
     backgroundImage:
@@ -32,7 +35,7 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         // navigate(from, { replace: true });
-        navigate("/dashboard");
+        navigate(from, { replace: true });
       })
       .catch((err) => {
         console.log(err);

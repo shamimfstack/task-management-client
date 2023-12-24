@@ -5,7 +5,7 @@ import { FaFacebook, FaGithub, FaTwitter } from "react-icons/fa";
 const Footer = () => {
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between bg-gray-900 text-white px-5 py-8">
+      <div className="flex flex-col md:flex-row justify-around bg-gray-900 text-white px-5 py-8">
         <Logo></Logo>
         <div className="flex gap-5">
             <span><FaFacebook className="text-xl"/></span>

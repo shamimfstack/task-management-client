@@ -7,6 +7,7 @@ import Register from "../Pages/Register/Register";
 import Dashboard from "../Layout/Dashboard";
 import CreateTask from "../Pages/Dashboard/CreateTask/CreateTask";
 import UserActivities from "../Pages/Dashboard/UserProfile/UserActivities"
+import EditTask from "../Pages/Dashboard/EditTask/EditTask";
 
 
 
@@ -36,12 +37,17 @@ const MainRoutes = createBrowserRouter([
         element: <Dashboard></Dashboard>,
         children: [
             {
-                path: "userProfile",
+                path: "userActivities",
                 element: <UserActivities></UserActivities>
             },
             {
                 path: "createTask",
                 element: <CreateTask></CreateTask>
+            },
+            {
+                path: "editTask/:id",
+                element: <EditTask></EditTask>,
+                loader: ({params}) => fetch(`http://localhost:5000/tasks/${params.id}`)
             }
         ]
     }

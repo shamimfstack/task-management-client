@@ -12,7 +12,7 @@ const Dashboard = () => {
         <div className="divider"></div>
         <ul>
             <li>
-                <Link to="/dashboard/userProfile">User Profile</Link>
+                <Link to="/dashboard/userActivities">User Profile</Link>
             </li>
             <li>
                 <Link to="/dashboard/createTask">Create Task</Link>

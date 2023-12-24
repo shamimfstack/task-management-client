@@ -6,8 +6,8 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Column from "./Columns/Column";
 import { Link } from "react-router-dom";
-// import { key } from "localforage";
-// import { ProviderId } from "firebase/auth";
+import Swal from "sweetalert2";
+
 
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   const newTasks = Array.from(sourceCol.tasksIds);
@@ -24,6 +24,7 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 
 const UserActivities = () => {
   const [tasks, setTasks] = useState([]);
+  // const [ tasks, refetch ] = useTasks()
   // const initialData = {
   //   tasks,
   //   columns: {
@@ -105,6 +106,28 @@ const UserActivities = () => {
     setState(newState);
   };
 
+  const handleDelete = (id) => {
+    console.log(id);
+    axiosPublic.delete(`/tasks/${id}`)
+    .then(res => {
+      if(res.data.deletedCount > 0) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Tasks has been created successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        axiosPublic.get(`/tasks?email=${user?.email}`)
+        .then(res => {
+          setTasks(res.data)
+        })
+        
+      }
+    })
+    
+  }
+
   return (
     <div>
       <h2 className="text-3xl text-center font-bold">User Activities</h2>
@@ -130,7 +153,7 @@ const UserActivities = () => {
             All To Do List -{" "}
             <span className="ml-6 text-white">{tasks.length}</span>
           </h3>
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext className="characters" onDragEnd={onDragEnd}>
             <Droppable droppableId="characters">
               {(droppableProvided, droppableSnapShot) => (
                 <div
@@ -158,6 +181,7 @@ const UserActivities = () => {
                                   Edit
                                 </button>
                               </Link>
+                              <button onClick={() => handleDelete(task._id)} className="btn btn-error btn-sm ml-2">Delete</button>
                             </span>
                           </div>
                         </div>

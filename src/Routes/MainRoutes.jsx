@@ -8,6 +8,7 @@ import Dashboard from "../Layout/Dashboard";
 import CreateTask from "../Pages/Dashboard/CreateTask/CreateTask";
 import UserActivities from "../Pages/Dashboard/UserProfile/UserActivities"
 import EditTask from "../Pages/Dashboard/EditTask/EditTask";
+import PrivateRoutes from "../Routes/PrivateRoutes"
 
 
 
@@ -34,7 +35,7 @@ const MainRoutes = createBrowserRouter([
     },
     {
         path: "dashboard",
-        element: <Dashboard></Dashboard>,
+        element: <PrivateRoutes><Dashboard></Dashboard></PrivateRoutes>,
         children: [
             {
                 path: "userActivities",

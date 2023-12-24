@@ -8,7 +8,6 @@ import Column from "./Columns/Column";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 const reorderColumnList = (sourceCol, startIndex, endIndex) => {
   const newTasks = Array.from(sourceCol.tasksIds);
   const [removed] = newTasks.splice(startIndex, 1);
@@ -24,28 +23,42 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 
 const UserActivities = () => {
   const [tasks, setTasks] = useState([]);
-  // const [ tasks, refetch ] = useTasks()
-  // const initialData = {
-  //   tasks,
-  //   columns: {
-  //     "column-1": {
-  //       id: "column-1",
-  //       title: "TO-DO",
-  //       taskIds:
-  //     }
-  //   }
-  // }
-  const [state, setState] = useState(tasks);
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
-  console.log(tasks);
-
   useEffect(() => {
     axiosPublic.get(`/tasks?email=${user?.email}`).then((data) => {
       console.log(data);
       setTasks(data.data);
     });
   }, [axiosPublic, user?.email]);
+  console.log(tasks);
+
+  const initialData = {
+    // tasks: tasks,
+    columns: {
+      "column-1": {
+        id: "column-1",
+        title: "TO-DO",
+        taskIds: [1, 2, 3, 4, 5, 6],
+      },
+      "column-2": {
+        id: "column-2",
+        title: "IN-PROGRESS",
+        taskIds: [],
+      },
+      "column-3": {
+        id: "column-3",
+        title: "COMPLETED",
+        taskIds: [],
+      },
+    },
+    columnOrder: ["column-1", "column-2", "column-3"],
+  };
+
+  const [state, setState] = useState(initialData);
+
+  console.log(tasks);
+  // const [ tasks, refetch ] = useTasks()
 
   const onDragEnd = (result) => {
     const { destination, source } = result;
@@ -108,9 +121,8 @@ const UserActivities = () => {
 
   const handleDelete = (id) => {
     console.log(id);
-    axiosPublic.delete(`/tasks/${id}`)
-    .then(res => {
-      if(res.data.deletedCount > 0) {
+    axiosPublic.delete(`/tasks/${id}`).then((res) => {
+      if (res.data.deletedCount > 0) {
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -118,15 +130,12 @@ const UserActivities = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        axiosPublic.get(`/tasks?email=${user?.email}`)
-        .then(res => {
-          setTasks(res.data)
-        })
-        
+        axiosPublic.get(`/tasks?email=${user?.email}`).then((res) => {
+          setTasks(res.data);
+        });
       }
-    })
-    
-  }
+    });
+  };
 
   return (
     <div>
@@ -144,18 +153,15 @@ const UserActivities = () => {
           </div>
         </div>
       </div>
-
-      {/* categorized tasks container */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {/* all tasks */}
         <div className="border shadow-lg p-5 rounded-lg">
           <h3 className="flex justify-center text-xl font-bold bg-green-800 p-2 text-white">
-            All To Do List -{" "}
-            <span className="ml-6 text-white">{tasks.length}</span>
+            TO-DO - <span className="ml-6 text-white">{tasks.length}</span>
           </h3>
           <DragDropContext className="characters" onDragEnd={onDragEnd}>
             <Droppable droppableId="characters">
-              {(droppableProvided, droppableSnapShot) => (
+              {(droppableProvided) => (
                 <div
                   {...droppableProvided.droppableProps}
                   {...droppableProvided.dragHandleProps}
@@ -167,7 +173,7 @@ const UserActivities = () => {
                       draggableId={`${task._id}`}
                       index={index}
                     >
-                      {(droppableProvided, droppableSnapShot) => (
+                      {(droppableProvided) => (
                         <div
                           ref={droppableProvided.innerRef}
                           {...droppableProvided.draggableProps}
@@ -181,7 +187,12 @@ const UserActivities = () => {
                                   Edit
                                 </button>
                               </Link>
-                              <button onClick={() => handleDelete(task._id)} className="btn btn-error btn-sm ml-2">Delete</button>
+                              <button
+                                onClick={() => handleDelete(task._id)}
+                                className="btn btn-error btn-sm ml-2"
+                              >
+                                Delete
+                              </button>
                             </span>
                           </div>
                         </div>
@@ -193,47 +204,110 @@ const UserActivities = () => {
               )}
             </Droppable>
           </DragDropContext>
-          {/* {
-            tasks.map(task => <li key={task.id}>{task.title}</li>)
-          } */}
         </div>
         {/* ongoing tasks */}
         <div className="border shadow-lg p-5 rounded-lg">
-          <h3 className="text-xl font-bold">All To Do List</h3>
-          <DragDropContext>
+          <h3 className="flex justify-center text-xl font-bold bg-green-800 p-2 text-white">
+            ON-GOING - <span className="ml-6 text-white">{tasks.length}</span>
+          </h3>
+          <DragDropContext className="characters" onDragEnd={onDragEnd}>
             <Droppable droppableId="characters">
-              {(provided) => (
+              {(droppableProvided) => (
                 <div
-                  {...provided.droppableProps}
-                  {...provided.dragHandleProps}
-                  ref={provided.innerRef}
+                  {...droppableProvided.droppableProps}
+                  {...droppableProvided.dragHandleProps}
+                  ref={droppableProvided.innerRef}
                 >
                   {tasks.map((task, index) => (
                     <Draggable
                       key={task._id}
-                      draggableId={task._id}
+                      draggableId={`${task._id}`}
                       index={index}
                     >
-                      {(provided) => (
+                      {(droppableProvided) => (
                         <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        ></div>
+                          ref={droppableProvided.innerRef}
+                          {...droppableProvided.draggableProps}
+                          {...droppableProvided.dragHandleProps}
+                        >
+                          <div className="flex justify-between bg-gray-100 my-2 p-2">
+                            <p>{task.title}</p>
+                            <span className="right-0">
+                              <Link to={`/dashboard/editTask/${task._id}`}>
+                                <button className="btn btn-info btn-sm">
+                                  Edit
+                                </button>
+                              </Link>
+                              <button
+                                onClick={() => handleDelete(task._id)}
+                                className="btn btn-error btn-sm ml-2"
+                              >
+                                Delete
+                              </button>
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </Draggable>
                   ))}
-                  {provided.placeholder}
+                  {droppableProvided.placeholder}
                 </div>
               )}
             </Droppable>
           </DragDropContext>
-          {/* {
-            tasks.map(task => <li key={task.id}>{task.title}</li>)
-          } */}
         </div>
-        {/* completed tasks */}
-        <Column />
+        {/* Completed tasks */}
+        <div className="border shadow-lg p-5 rounded-lg">
+          <h3 className="flex justify-center text-xl font-bold bg-green-800 p-2 text-white">
+            COMPLETED TASK -{" "}
+            <span className="ml-6 text-white">{tasks.length}</span>
+          </h3>
+          <DragDropContext className="characters" onDragEnd={onDragEnd}>
+            <Droppable droppableId="characters">
+              {(droppableProvided) => (
+                <div
+                  {...droppableProvided.droppableProps}
+                  {...droppableProvided.dragHandleProps}
+                  ref={droppableProvided.innerRef}
+                >
+                  {tasks.map((task, index) => (
+                    <Draggable
+                      key={task._id}
+                      draggableId={`${task._id}`}
+                      index={index}
+                    >
+                      {(droppableProvided) => (
+                        <div
+                          ref={droppableProvided.innerRef}
+                          {...droppableProvided.draggableProps}
+                          {...droppableProvided.dragHandleProps}
+                        >
+                          <div className="flex justify-between bg-gray-100 my-2 p-2">
+                            <p>{task.title}</p>
+                            <span className="right-0">
+                              <Link to={`/dashboard/editTask/${task._id}`}>
+                                <button className="btn btn-info btn-sm">
+                                  Edit
+                                </button>
+                              </Link>
+                              <button
+                                onClick={() => handleDelete(task._id)}
+                                className="btn btn-error btn-sm ml-2"
+                              >
+                                Delete
+                              </button>
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {droppableProvided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       </div>
     </div>
   );

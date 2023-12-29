@@ -4,7 +4,7 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 // import { DndProvider } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import Column from "./Columns/Column";
+// import Column from "./Columns/Column";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -23,10 +23,12 @@ const reorderColumnList = (sourceCol, startIndex, endIndex) => {
 
 const UserActivities = () => {
   const [tasks, setTasks] = useState([]);
+  const [onGoingTasks, setOngoingTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   useEffect(() => {
-    axiosPublic.get(`/tasks`).then((data) => {
+    axiosPublic.get(`/tasks?email=${user?.email}`).then((data) => {
       console.log(data);
       setTasks(data.data);
     });
@@ -208,7 +210,8 @@ const UserActivities = () => {
         {/* ongoing tasks */}
         <div className="border shadow-lg p-5 rounded-lg">
           <h3 className="flex justify-center text-xl font-bold bg-green-800 p-2 text-white">
-            ON-GOING - <span className="ml-6 text-white">{tasks.length}</span>
+            ON-GOING -{" "}
+            <span className="ml-6 text-white">{onGoingTasks.length}</span>
           </h3>
           <DragDropContext className="characters" onDragEnd={onDragEnd}>
             <Droppable droppableId="characters">
@@ -218,7 +221,7 @@ const UserActivities = () => {
                   {...droppableProvided.dragHandleProps}
                   ref={droppableProvided.innerRef}
                 >
-                  {tasks.map((task, index) => (
+                  {onGoingTasks.map((task, index) => (
                     <Draggable
                       key={task._id}
                       draggableId={`${task._id}`}
@@ -260,7 +263,7 @@ const UserActivities = () => {
         <div className="border shadow-lg p-5 rounded-lg">
           <h3 className="flex justify-center text-xl font-bold bg-green-800 p-2 text-white">
             COMPLETED TASK -{" "}
-            <span className="ml-6 text-white">{tasks.length}</span>
+            <span className="ml-6 text-white">{completedTasks.length}</span>
           </h3>
           <DragDropContext className="characters" onDragEnd={onDragEnd}>
             <Droppable droppableId="characters">
@@ -270,7 +273,7 @@ const UserActivities = () => {
                   {...droppableProvided.dragHandleProps}
                   ref={droppableProvided.innerRef}
                 >
-                  {tasks.map((task, index) => (
+                  {completedTasks.map((task, index) => (
                     <Draggable
                       key={task._id}
                       draggableId={`${task._id}`}
@@ -308,12 +311,9 @@ const UserActivities = () => {
             </Droppable>
           </DragDropContext>
         </div>
-    </div>
-      
+      </div>
     </div>
   );
 };
 
 export default UserActivities;
-
-  

@@ -1,7 +1,7 @@
 // import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const EditTask = () => {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   const { register, reset, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
@@ -39,6 +40,7 @@ const EditTask = () => {
                 showConfirmButton: false,
                 timer: 1500,
               });
+              navigate("/dashboard/userActivities")
         }
     })
     .then(err => {

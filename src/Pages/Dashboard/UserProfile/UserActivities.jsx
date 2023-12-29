@@ -26,7 +26,7 @@ const UserActivities = () => {
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
   useEffect(() => {
-    axiosPublic.get(`/tasks?email=${user?.email}`).then((data) => {
+    axiosPublic.get(`/tasks`).then((data) => {
       console.log(data);
       setTasks(data.data);
     });
@@ -308,9 +308,12 @@ const UserActivities = () => {
             </Droppable>
           </DragDropContext>
         </div>
-      </div>
+    </div>
+      
     </div>
   );
 };
 
 export default UserActivities;
+
+  

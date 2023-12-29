@@ -6,9 +6,11 @@ import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
 import Dashboard from "../Layout/Dashboard";
 import CreateTask from "../Pages/Dashboard/CreateTask/CreateTask";
-import UserActivities from "../Pages/Dashboard/UserProfile/UserActivities"
+// import UserActivities from "../Pages/Dashboard/UserProfile/UserActivities"
 import EditTask from "../Pages/Dashboard/EditTask/EditTask";
 import PrivateRoutes from "../Routes/PrivateRoutes"
+import UserTasks from "../Pages/Dashboard/Tasks/UserTasks";
+import UserActivities from "../Pages/Dashboard/UserProfile/UserActivities";
 
 
 
@@ -41,6 +43,10 @@ const MainRoutes = createBrowserRouter([
                 path: "userActivities",
                 element: <UserActivities></UserActivities>
             },
+            // {
+            //     path: "userActivities",
+            //     element: <UserTasks></UserTasks>
+            // },
             {
                 path: "createTask",
                 element: <CreateTask></CreateTask>
@@ -48,7 +54,7 @@ const MainRoutes = createBrowserRouter([
             {
                 path: "editTask/:id",
                 element: <EditTask></EditTask>,
-                loader: ({params}) => fetch(`http://localhost:5000/tasks/${params.id}`)
+                loader: ({params}) => fetch(`https://task-management-server-amber-nu.vercel.app/tasks/${params.id}`)
             }
         ]
     }

@@ -4,8 +4,10 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useLoaderData } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { useState } from "react";
 
 const EditTask = () => {
+  const [ priority, setPriority ] = useState("")
   const {_id, title, description, dueDate } = useLoaderData();
   const { user } = useAuth();
   const axiosPublic = useAxiosPublic();
@@ -25,19 +27,6 @@ const EditTask = () => {
     }
     console.log(updatedTask);
 
-    // fetch(`http://localhost:5000/tasks/${_id}`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'content-type': 'application/json,',
-    //   },
-    //   body: JSON.stringify(updatedTask)
-    // })
-    // .then(res => res.json())
-    // .then(data => {
-    //   console.log(data);
-    // })
-
-
     axiosPublic.put(`/tasks/${_id}`, updatedTask)
     .then(res => {
         console.log(res.data);
@@ -56,6 +45,10 @@ const EditTask = () => {
         console.log(err);
     })
   };
+
+  const handlePriorityChange  = (e) => {
+    setPriority(e.target.value);
+  }
 
  
   return (
@@ -78,7 +71,15 @@ const EditTask = () => {
                 <input className="input input-bordered w-full" defaultValue={dueDate} type="date"  {...register("dueDate", {required: true})}  />
             </div>
             <div>
-                <input className="mt-5 btn btn-info btn-block" type="submit" value="Add New Task"  />
+            <label htmlFor="title">Priority:</label>
+            <select className="input input-bordered w-full" value={priority} onChange={handlePriorityChange}>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+            <div>
+                <input className="mt-5 btn btn-info btn-block" type="submit" value="Save"  />
             </div>
         </form>
       </div>
